@@ -32,9 +32,12 @@ protected:
 private:
 	BOOL			m_bRunning;
 	int				m_delay;
+	int				m_maximum;
 public:
 	CString m_strTick;
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	void Toggle(void);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };

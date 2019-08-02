@@ -36,7 +36,7 @@ BEGIN
 END
 
 IDD_TICKUI_DIALOG DIALOGEX 0, 0, 285, 139
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "tickUI"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
@@ -191,8 +191,8 @@ IDR_MAINFRAME           ICON                    "res\\tickUI.ico"
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE 4, 2
 #pragma code_page(936)
-#include "res\tickUI.rc2"  // ¡¤? Microsoft Visual C++ ¡À¨¤?-1y¦Ì?¡Á¨º?¡ä
-#include "afxres.rc"         // ¡À¨º¡Á?¡Á¨¦?t
+#include "res\tickUI.rc2"  // ? Microsoft Visual C++ ??????
+#include "afxres.rc"         // ????
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

@@ -75,6 +75,7 @@ BEGIN_MESSAGE_MAP(CtickUIDlg, CDialog)
 	//}}AFX_MSG_MAP
 	ON_WM_TIMER()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -233,6 +234,11 @@ void CALLBACK MyTimeProc(  UINT uID,        UINT uMsg,       DWORD dwUser,    DW
 		HGDIOBJ  old = memDC.SelectObject(m_ftUI.GetSafeHandle());
 		memDC.SetBkMode(TRANSPARENT);
 		memDC.FillRect(rcClient, NULL);
+		CFont ftClock;
+		int fontSize = rcClient.Width() * 8 / 35;
+		ftClock.CreateFont(fontSize, fontSize / 3, 0,0,0,0,0,0,0,0,0,0,0,"FixSystem");
+		CFont *oldFont;
+		oldFont = memDC.SelectObject(&ftClock);
 		memDC.TextOut(0, 0, s);
 
 		//added
@@ -251,25 +257,29 @@ void CALLBACK MyTimeProc(  UINT uID,        UINT uMsg,       DWORD dwUser,    DW
 
 		CFont ftIndex;
 		ftIndex.CreateFont(50, 16, 0,0,0,0,0,0,0,0,0,0,0,"FixSystem");
-		CFont *oldFont;
-		oldFont = memDC.SelectObject(&ftIndex);
+		memDC.SelectObject(&ftIndex);
 
 		CString str_index;
+		int step = rcClient.Width() / 12;
 		for(int i=1;i<=10;i++) {
-			memDC.MoveTo(i * 40, 100);
-			memDC.LineTo(i * 40, 150);
+			memDC.MoveTo(i * step, rcClient.Height() * 3 / 8);
+			memDC.LineTo(i * step, rcClient.Height() * 5 / 8);
 			str_index.Format("%d", i * 200);
 			if(i % 5 == 0)
-				memDC.TextOut(i * 40, 150, str_index);
+				memDC.TextOut(i * step, rcClient.Height() * 5 / 8, str_index);
 		}
 
-		memDC.MoveTo(0, 125);
-		memDC.LineTo(400, 125);
+		// base line
+		int full_line_width = 10 * step;
+		memDC.MoveTo(0, rcClient.Height() / 2);
+		memDC.LineTo(full_line_width, rcClient.Height() / 2);
 
-		memDC.Rectangle(pos / 5 - 5, 100, pos / 5 + 10, 150);
+		int rec_pos = pos * full_line_width / 2000;
+		int a = rcClient.Height() / 12;
+		memDC.Rectangle(rec_pos - a, rcClient.Height() * 5 / 12, rec_pos + a, rcClient.Height() * 7 / 12);
 
 		if(stNow.wSecond % 2 == 0 && stNow.wMilliseconds < 50) {
-			memDC.Rectangle(0, 150, 500, 300);
+			memDC.Rectangle(0, rcClient.Height() * 2 / 3, rcClient.Width(), rcClient.Height());
 
 			MessageBeep(MB_OK);
 			unsigned FREQUENCY[] = {392,392,440,392,523,494,  
@@ -321,4 +331,32 @@ void CtickUIDlg::Toggle(void)
 	{
 		timeKillEvent(tmID);
 	}
+}
+
+
+
+BOOL CtickUIDlg::PreTranslateMessage(MSG* pMsg)
+{
+	return CDialog::PreTranslateMessage(pMsg);
+}
+
+
+void CtickUIDlg::OnSize(UINT nType, int cx, int cy)
+{
+	CDialog::OnSize(nType, cx, cy);
+
+	switch( nType)
+    {
+    case SIZE_RESTORED:
+        //AfxMessageBox(_T("捕获到窗口还原消息"));
+		m_maximum = 0;
+        break;
+    case SIZE_MINIMIZED:
+        //AfxMessageBox(_T("捕获到窗口最小化消息"));
+        break;
+    case SIZE_MAXIMIZED:
+        //AfxMessageBox(_T("捕获到窗口最大化消息"));
+		m_maximum = 1;
+        break;
+    }
 }
